@@ -1,0 +1,26 @@
+.App {
+    text-align: center;
+}
+
+
+.button {
+    margin: 50px;
+  box-shadow: 1px 2px 4px 2px rgba(0, 0, 0, 0.5);
+  font-weight: bold;
+
+}
+.form1{
+    width: 350px;
+    background-color: #57ff54;
+    padding: 30px;
+    font-weight: bold;
+    margin: 0 auto;
+
+}
+
+.button2 {
+    margin: 10px;
+    box-shadow: 1px 2px 4px 2px rgba(0, 0, 0, 0.5);
+    font-weight: bold;
+
+}
