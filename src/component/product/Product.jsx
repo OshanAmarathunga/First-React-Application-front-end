@@ -15,6 +15,7 @@ function Product() {
     const [categoryIdVal,setCategoryId]=useState("");
     const [products,setProducts]=useState(null);
     const [categoriesObj,setCategories]=useState("");
+    const [edit,setEdit]=useState(null);
 
     useEffect(()=>{
         loadProductTable();
@@ -56,6 +57,38 @@ function Product() {
             });
     }
 
+    function handleUpdate(event){
+        event.preventDefault();
+
+        const updatedData={
+            name:productNameV,
+            price:priceV,
+            quantity:qtyV,
+            categoryId:categoryIdVal
+        }
+
+        console.log(updatedData)
+
+        axios.put("http://localhost:8080/product/"+edit,updatedData)
+            .then(()=>{
+                loadProductTable();
+
+                Swal.fire({
+                    title: "Updated !",
+                    text: "Product added!",
+                    icon: "success"
+                });
+            })
+            .catch((error)=>{
+                console.log(error);
+                Swal.fire({
+                    title: "Error!",
+                    text: "Sorry Cannot Submit the Updated Data!",
+                    icon: "error"
+                });
+            });
+    }
+
     function loadProductTable(){
         axios.get("http://localhost:8080/products")
             .then((res)=>{
@@ -88,6 +121,7 @@ function Product() {
                     </Link>
                 </div>
             </div>
+            {!edit &&
             <div className="container" id="productManage">
 
                 <h2>ADD PRODUCT</h2>
@@ -114,13 +148,15 @@ function Product() {
                         <div className="col">
                             <Form.Label htmlFor="inputPassword5">Category</Form.Label>
 
-                                <select onChange={(event4) => {setCategoryId(event4.target.value);}}>
-                                    <option value="">Select a Category</option>
-                                    {
-                                        categoriesObj && categoriesObj.map((eachCategory) => (
+                            <select onChange={(event4) => {
+                                setCategoryId(event4.target.value);
+                            }}>
+                                <option value="">Select a Category</option>
+                                {
+                                    categoriesObj && categoriesObj.map((eachCategory) => (
                                         <option key={eachCategory.id} value={eachCategory.id}>{eachCategory.name}</option>
                                     ))}
-                                </select>
+                            </select>
 
                         </div>
                     </div>
@@ -130,20 +166,68 @@ function Product() {
 
                 </form>
             </div>
+            }
+
+            {edit &&
+            <div className="container" id="productManage">
+
+                <h2>UPDATE DETAILS</h2>
+                <form onSubmit={handleUpdate} className="addProductForm">
+                    <div className="row">
+                        <div className="col">
+                            <Form.Label htmlFor="inputPassword5">Product Name</Form.Label>
+                            <Form.Control value={productNameV} onChange={(event) => {
+                                setProductName(event.target.value)
+                            }} type="text" id="productName" required/>
+                        </div>
+                        <div className="col">
+                            <Form.Label htmlFor="inputPassword5">Price</Form.Label>
+                            <Form.Control value={priceV} onChange={(event2) => {
+                                setPrice(event2.target.value)
+                            }} type="text" id="price" required/>
+                        </div>
+                        <div className="col">
+                            <Form.Label htmlFor="inputPassword5">QTY</Form.Label>
+                            <Form.Control value={qtyV} onChange={(event3) => {
+                                setQty(event3.target.value)
+                            }} type="text" id="qty" required/>
+                        </div>
+                        <div className="col">
+                            <Form.Label htmlFor="inputPassword5">Category</Form.Label>
+
+                            <select value={categoryIdVal} onChange={(event4) => {
+                                setCategoryId(event4.target.value);
+                            }}>
+                                <option value="">Select a Category</option>
+                                {
+                                    categoriesObj && categoriesObj.map((eachCategory) => (
+                                        <option key={eachCategory.id} value={eachCategory.id}>{eachCategory.name}</option>
+                                    ))}
+                            </select>
+
+                        </div>
+                    </div>
+                    <div className="btnAdd">
+                        <Button type="submit" id="idBtnADD" variant="warning">EDIT PRODUCT</Button>{' '}
+                    </div>
+
+                </form>
+            </div>
+            }
 
 
             <div className="container" id="productSummaryTable">
                 <Table striped bordered hover>
-                <thead>
-                <tr>
+                    <thead>
+                    <tr>
 
-                    <th>Item Code</th>
-                    <th>Product Name</th>
-                    <th>Price</th>
-                    <th>Qty</th>
-                    <th>Category</th>
-                </tr>
-                </thead>
+                        <th>Item Code</th>
+                        <th>Product Name</th>
+                        <th>Price</th>
+                        <th>Qty</th>
+                        <th>Category</th>
+                    </tr>
+                    </thead>
                     <tbody>
                     {
                         products && products.map((eachProduct) => (
@@ -153,6 +237,15 @@ function Product() {
                                 <td>{eachProduct.price}</td>
                                 <td>{eachProduct.qty}</td>
                                 <td>{eachProduct.category?.name}</td>
+                                <td><Button variant="success" onClick={() => {
+                                    setEdit(eachProduct.id);
+                                    setProductName(eachProduct.productName);
+                                    setPrice(eachProduct.price);
+                                    setQty(eachProduct.qty);
+                                    setCategoryId(eachProduct.id);
+                                }}>Edit</Button>{' '}</td>
+                                <td><Button variant="info" onClick={()=>setEdit(null)}>Cancel</Button>{' '}</td>
+                                <td><Button variant="danger">Delete</Button>{' '}</td>
 
                             </tr>
                         ))
