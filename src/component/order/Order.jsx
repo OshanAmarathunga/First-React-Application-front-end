@@ -39,11 +39,12 @@ function Order(){
                 </Link>
 
 
-                <div className="container" id="orderSummaryTable">
+                <div className="container" >
                     <div className="text-end mb-3">
                         <Button variant="warning" onClick={handleAddOrder}>Place Order</Button>{' '}
                     </div>
-                    <Table striped bordered hover>
+                    <div id="orderSummaryTable">
+                    <Table striped bordered hover >
                         <thead>
                         <tr>
                             <th>Order ID</th>
@@ -58,18 +59,23 @@ function Order(){
                                 <td>{eachOrder.id}</td>
                                 <td>{eachOrder.totalPrice}</td>
                                 <td>{moment(eachOrder.orderDateTime).format('MMMM Do YYYY, h:mm:ss a')}</td>
-                                <td><Button variant="info" onClick={()=>{
+
+                                {!eachOrder.orderStatus==1 &&
+                                <td><Button variant="info" onClick={() => {
                                     navigate(`/Order/${eachOrder.id}/products`);
                                 }}>Edit</Button>{' '}</td>
-                                {/*<td><Button variant="success">Edit</Button>{' '}</td>*/}
-                                {/*<td><Button variant="info">Cancel</Button>{' '}</td>*/}
-                                {/*<td><Button variant="danger">Delete</Button>{' '}</td>*/}
+                                }
+
+                                {eachOrder.orderStatus==1 &&
+                                <td><Button variant="danger" >Delete</Button>{' '}</td>
+                                }
+
                             </tr>
                         ))
-
                         }
                         </tbody>
                     </Table>
+                    </div>
                 </div>
 
 

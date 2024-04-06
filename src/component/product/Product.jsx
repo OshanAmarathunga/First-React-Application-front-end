@@ -217,7 +217,7 @@ function Product() {
 
 
             <div className="container" id="productSummaryTable">
-                <Table striped bordered hover>
+                <Table striped bordered hover >
                     <thead>
                     <tr>
 
@@ -245,7 +245,20 @@ function Product() {
                                     setCategoryId(eachProduct.id);
                                 }}>Edit</Button>{' '}</td>
                                 <td><Button variant="info" onClick={()=>setEdit(null)}>Cancel</Button>{' '}</td>
-                                <td><Button variant="danger">Delete</Button>{' '}</td>
+                                <td><Button variant="danger" onClick={()=>{
+                                    axios.delete("http://localhost:8080/product/"+eachProduct.id)
+                                        .then(()=>{
+                                            Swal.fire("Product Deleted !");
+                                            loadProductTable();
+                                        })
+                                        .catch((error)=>{
+                                            Swal.fire({
+                                                icon: "Error",
+                                                title: "Oops...",
+                                                text: "You can not Delete this Product! "
+                                            });
+                                        })
+                                }}>Delete</Button>{' '}</td>
 
                             </tr>
                         ))
