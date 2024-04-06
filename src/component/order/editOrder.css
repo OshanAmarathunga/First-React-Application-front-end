@@ -2,3 +2,16 @@
     height: 400px;
     overflow-y: auto;
 }
+#orderProduct{
+    height: 400px;
+    overflow-y: auto;
+}
+.total-price{
+    font-size: 30px;
+    font-weight: bold;
+    font-family: Cambria;
+}
+
+#txtTotalPriceLabel{
+font-size: 30px;
+}

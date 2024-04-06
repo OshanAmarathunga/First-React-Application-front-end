@@ -1,3 +1,4 @@
 #orderSummaryTable{
-    margin-top: 10px;
+    height: 400px;
+    overflow-y: auto;
 }
