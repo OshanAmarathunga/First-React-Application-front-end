@@ -11,18 +11,27 @@ import {BrowserRouter, Link, Navigate, Route, Routes, useNavigate} from "react-r
 import Order from "./component/order/Order";
 import Home from "./component/home/Home";
 import EditOrder from "./component/order/EditOrder";
+import {AuthProvider} from "./utils/AuthContext";
+import Login from "./Login";
+import LoginPage from "./Login";
+import ProtectedRoute from "./utils/ProtectedRoute";
 
 function App() {
     return (
         <div className="App">
-            <BrowserRouter>
-                <Routes>
-                    <Route path="/" element={<Home/>}></Route>
-                    <Route path="/Product" element={<Product/>}></Route>
-                    <Route path="/Order" element={<Order/>}></Route>
-                    <Route path="/Order/:id/products" element={<EditOrder/>}></Route>
-                </Routes>
-            </BrowserRouter>
+            <AuthProvider>
+                <BrowserRouter>
+                    <Routes>
+                        <Route element={<ProtectedRoute/>}>
+                            <Route path="/" element={<Home/>}></Route>
+                            <Route path="/Product" element={<Product/>}></Route>
+                            <Route path="/Order" element={<Order/>}></Route>
+                            <Route path="/Order/:id/products" element={<EditOrder/>}></Route>
+                            <Route path="/login" element={<LoginPage/>}></Route>
+                        </Route>
+                    </Routes>
+                </BrowserRouter>
+            </AuthProvider>
         </div>
     );
 }

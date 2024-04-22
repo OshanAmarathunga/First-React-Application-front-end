@@ -6,6 +6,7 @@ import './Product.css';
 import Table from "react-bootstrap/Table";
 import axios from "axios";
 import Swal from "sweetalert2";
+import {useAuth} from "../../utils/AuthContext";
 
 function Product() {
     const navigate = useNavigate();
@@ -17,10 +18,20 @@ function Product() {
     const [categoriesObj,setCategories]=useState("");
     const [edit,setEdit]=useState(null);
 
-    useEffect(()=>{
-        loadProductTable();
+    const {isAuthenticated,jwtToken}=useAuth();
+    const config={
+        headers :{
+            Authorization:`Bearer ${jwtToken}`
+        }
+    }
 
-    },[]);
+
+    useEffect(()=>{
+        if(isAuthenticated) {
+            loadProductTable();
+        }
+
+    },[isAuthenticated]);
     useEffect(()=>{
         loadCategories();
     },[]);
@@ -35,7 +46,7 @@ function Product() {
             categoryId:categoryIdVal
 
         }
-        axios.post("http://localhost:8080/product",postData)
+        axios.post("http://localhost:8080/product",postData,config)
             .then(()=>{
                 loadProductTable();
                 setProductName("")
@@ -69,7 +80,7 @@ function Product() {
 
         console.log(updatedData)
 
-        axios.put("http://localhost:8080/product/"+edit,updatedData)
+        axios.put("http://localhost:8080/product/"+edit,updatedData,config)
             .then(()=>{
                 loadProductTable();
 
@@ -90,7 +101,7 @@ function Product() {
     }
 
     function loadProductTable(){
-        axios.get("http://localhost:8080/products")
+        axios.get("http://localhost:8080/products",config)
             .then((res)=>{
                setProducts(res.data);
 
@@ -101,7 +112,7 @@ function Product() {
             });
     }
     function loadCategories(){
-        axios.get("http://localhost:8080/categories")
+        axios.get("http://localhost:8080/categories",config)
             .then((response)=>{
                 setCategories(response.data);
             })
