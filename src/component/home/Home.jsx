@@ -6,6 +6,7 @@ import Form from "react-bootstrap/Form";
 import TableforAllUsers from "../TableforAllUsers";
 import {BrowserRouter, Link, Route, Routes} from "react-router-dom";
 import Product from "../product/Product";
+import {useAuth} from "../../utils/AuthContext";
 
 function Home(){
     const [count, setCount] = useState(0);
@@ -14,6 +15,8 @@ function Home(){
     const [passwordVal, setPassword] = useState("");
     const [emailVal, setEmail] = useState("");
     const [edit, setEdit] = useState(null);
+
+    const {logout}=useAuth();
 
     useEffect(()=>{
         getUsers();
@@ -103,13 +106,17 @@ function Home(){
             <div className="row">
                 <div className="col">
                     <Link to="/order">
-                        <Button  variant="light">Order page</Button>{' '}
+                        <Button variant="light">Order page</Button>{' '}
                     </Link>
                 </div>
                 <div className="col">
                     <Link to="/product">
-                        <Button  variant="light">Product page</Button>{' '}
+                        <Button variant="light">Product page</Button>{' '}
                     </Link>
+                </div>
+                <div className="col">
+                        <Button variant="danger" onClick={logout}>LogOut</Button>{' '}
+
                 </div>
             </div>
             <h1>Counter : {count}</h1>
